@@ -1,5 +1,4 @@
 const fs = require('fs');
-const mkdirp = require('mkdirp');
 const FanController = require('./lib/FanController.js');
 const Events = require('./lib/Events.js');
 
@@ -7,7 +6,7 @@ let Service, Characteristic, Homebridge, Accessory;
 
 const PLUGIN_NAME = 'homebridge-xiaomi-fan';
 const PLATFORM_NAME = 'xiaomifan';
-const PLUGIN_VERSION = '1.5.9';
+const PLUGIN_VERSION = '1.5.10';
 
 // General constants
 const BATTERY_LOW_THRESHOLD = 20;
@@ -96,7 +95,7 @@ class xiaomiFanDevice {
 
     // check if the fan preferences directory exists, if not then create it
     if (fs.existsSync(this.prefsDir) === false) {
-      mkdirp(this.prefsDir);
+      fs.mkdirSync(this.prefsDir, {recursive: true});
     }
 
     // create fan model info file name
@@ -155,9 +154,12 @@ class xiaomiFanDevice {
   initFanAccessory() {
     // generate uuid
     this.UUID = Homebridge.hap.uuid.generate(this.token + this.ip + PLATFORM_NAME);
+    const fanCategory = (Homebridge.hap.Categories && Homebridge.hap.Categories.FAN) ||
+      (Homebridge.hap.Accessory && Homebridge.hap.Accessory.Categories && Homebridge.hap.Accessory.Categories.FAN) ||
+      3;
 
     // prepare the fan accessory
-    this.fanAccesory = new Accessory(this.name, this.UUID, Homebridge.hap.Accessory.Categories.FAN);
+    this.fanAccesory = new Accessory(this.name, this.UUID, fanCategory);
 
     // prepare accessory services
     if (this.fanDevice) {
@@ -523,7 +525,7 @@ class xiaomiFanDevice {
 
   prepareBatteryService() {
     if (this.fanDevice.hasBuiltInBattery() && this.fanDevice.supportsBatteryStateReporting()) {
-      this.batteryService = new Service.BatteryService('Battery', 'batteryService');
+      this.batteryService = new Service.Battery('Battery', 'batteryService');
       this.batteryService
         .setCharacteristic(Characteristic.ChargingState, Characteristic.ChargingState.NOT_CHARGING)
         .setCharacteristic(Characteristic.StatusLowBattery, Characteristic.StatusLowBattery.BATTERY_LEVEL_NORMAL);

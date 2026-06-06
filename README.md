@@ -78,6 +78,7 @@ Example configuration:
           "name": "Xiaomi Fan 2s",
           "ip": "192.168.0.40",
           "token": "8305d8fba83f94bb5ad8f963b6c84c84",
+          "model": "dmaker.fan.p18",
           "pollingInterval": 10,
           "moveControl": true,
           "buzzerControl": true,
@@ -118,6 +119,7 @@ The device token of your Fan.
 New fan devices which use the miot protocol require the device id to be specified. The deviceId will be automatically retrieved by the plugin but if there is trouble you can manually specify it. **Default: "" (not specified)**
 - `model` [optional]
 The fan model. If specified then the accessory will be created instantly without the need to first discover and identify the fan. **Default: "" (not specified)**
+For `dmaker.fan.p18` on Homebridge 2, setting `"model": "dmaker.fan.p18"` is recommended so the plugin can build the MIoT accessory before a live discovery response is available.
 - `prefsDir` [optional]
 The directory where the fan device info will be stored. **Default: "~/.homebridge/.xiaomiFan"**
 - `pollingInterval` [optional]

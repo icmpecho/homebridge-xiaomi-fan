@@ -41,7 +41,7 @@
           },
           "model": {
             "title": "The fan model",
-            "description": "The model of your fan. If specified then the accessory will be created instantly without the need to first discover and identify the fan.",
+            "description": "The model of your fan. If specified then the accessory will be created instantly without the need to first discover and identify the fan. Recommended for dmaker.fan.p18 on Homebridge 2.",
             "type": "string",
             "required": false
           },
